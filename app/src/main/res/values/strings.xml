@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mobile_Client</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_hint">Please Login</string>
+    <string name="str_username">username</string>
+    <string name="str_password">password</string>
+    <string name="login">Login</string>
+    <string name="title_activity_main_page">MainPageActivity</string>
+    <string name="see_song_list">See Song List</string>
+    <string name="title_activity_song_list">SongListActivity</string>
+
+</resources>
