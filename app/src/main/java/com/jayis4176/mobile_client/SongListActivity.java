@@ -1,6 +1,9 @@
 package com.jayis4176.mobile_client;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,33 +15,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class SongListActivity extends ActionBarActivity {
-/*
-    private ListView listView;
-    private String[] list = {"鉛筆","原子筆","鋼筆","毛筆","彩色筆"};
-    private ArrayAdapter<String> listAdapter;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_song_list);
-        listView = (ListView)findViewById(R.id.listview);
-        listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                Toast.makeText(getApplicationContext(),                                                          "你選擇的是"+list[position], Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    /**/
 
     private String str_JSON = "";
     private JSONArray file_list;
@@ -46,7 +37,10 @@ public class SongListActivity extends ActionBarActivity {
     private String tmp_string = "";
     private ArrayAdapter<String> listAdapter;
     private ListView listview;
-    private List<String> files;
+    private List<String> files = new ArrayList<>();
+    private String DownloadURL = "";
+    private long enqueue;
+    private DownloadManager dm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +69,33 @@ public class SongListActivity extends ActionBarActivity {
         listAdapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, files.toArray(new String[0]));
         listview.setAdapter(listAdapter);
 
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                //Toast.makeText(getApplicationContext(), "你選擇的是"+ position, Toast.LENGTH_SHORT).show();
+                try {
+                    DownloadURL = "http://106.187.36.145:3000" + file_list.getJSONObject(position).getString("url");
+
+                    dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(DownloadURL));
+                    //File file = new File("/storage/sdcard0/Download/GG.mp3");
+                    //request.setDestinationUri(Uri.parse("//storage/sdcard0/Download/GG.mp3"));
+                    enqueue = dm.enqueue(request);
+
+                    /*
+                    DownloadManager.Query query = new DownloadManager.Query();
+                    query.setFilterById(enqueue);
+                    dm.query(query);
+                    */
+                    while (dm.getUriForDownloadedFile(enqueue)==null) {}
+                    tmp_string = dm.getUriForDownloadedFile(enqueue).toString();
+                    show_result(tmp_string);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         //show_result(tmp_string);
     }
 /**/
