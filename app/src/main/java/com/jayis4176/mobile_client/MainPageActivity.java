@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainPageActivity extends ActionBarActivity {
 
-    private String list_site = "http://106.187.36.145:3000/list_json/";
+    private String list_site = "http://106.187.36.145:3000/list.json";
     public DefaultHttpClient client;
 
     public final static String EXTRA_STR_JSON = "com.jayis4176.mobile_client.JSON";
