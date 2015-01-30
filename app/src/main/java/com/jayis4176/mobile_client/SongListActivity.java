@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +80,10 @@ public class SongListActivity extends ActionBarActivity {
 
                     dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(DownloadURL));
-                    //File file = new File("/storage/sdcard0/Download/GG.mp3");
-                    //request.setDestinationUri(Uri.parse("//storage/sdcard0/Download/GG.mp3"));
+                    //URI destination = new URI("/storage/sdcard0/Download/GG.mp3");
+                    File destination = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+                    File file = new File(destination, "gg.mp3");
+                    request.setDestinationUri(Uri.parse(file.toURI().toString()));
                     enqueue = dm.enqueue(request);
 
                     /*
